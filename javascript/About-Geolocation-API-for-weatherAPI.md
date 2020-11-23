@@ -1,0 +1,111 @@
+# About Geolocation API for weatherAPI
+날씨앱을 만들다가 문득 이런생각이 들었다.
+현재 나와있는 기본 날씨앱들은 위치를 기반으로  
+날씨 정보를 전달해준다.  
+하지만 내가 만들었던 날씨앱은 그저 위치를 검색해고,  
+검색한 위치를 기반으로 날씨를 찾아주는데 그치치않았다.  
+그래서 위치를 전달해주는 API는 없을까 보다가  
+ECMA스크립트는 그걸 가능하게 해준다는걸 깨달았다.  
+
+___  
+
+## Geolocation API활용법  
+사용자의 현위치는  
+navigator.geolocation 객체를 통해 알수있다.  
+놀랍지 않은가? 스크립트 언어가 내장객체를 통해 사용자의 위치도 알려준다.  
+
+</br>
+
+### 위치를 받아오는지 확인하는 방법  
+
+<div class="colorscripter-code" style="color:#f0f0f0;font-family:Consolas, 'Liberation Mono', Menlo, Courier, monospace !important; position:relative !important;overflow:auto"><table class="colorscripter-code-table" style="margin:0;padding:0;border:none;background-color:#272727;border-radius:4px;" cellspacing="0" cellpadding="0"><tr><td style="padding:6px;border-right:2px solid #4f4f4f"><div style="margin:0;padding:0;word-break:normal;text-align:right;color:#aaa;font-family:Consolas, 'Liberation Mono', Menlo, Courier, monospace !important;line-height:130%"><div style="line-height:130%">1</div><div style="line-height:130%">2</div><div style="line-height:130%">3</div></div></td><td style="padding:6px 0;text-align:left"><div style="margin:0;padding:0;color:#f0f0f0;font-family:Consolas, 'Liberation Mono', Menlo, Courier, monospace !important;line-height:130%"><div style="padding:0 6px; white-space:pre; line-height:130%"><span style="color:#4be6fa">navigator</span>.geolocation.getCurrentPosition(<span style="color:#ff3399">function</span>&nbsp;(위치)&nbsp;{</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;<span style="color:#4be6fa">console</span>.log(위치);</div><div style="padding:0 6px; white-space:pre; line-height:130%">},<span style="color:#ff3399">function</span>&nbsp;(위치){<span style="color:#4be6fa">console</span>.log(<span style="color:#ffd500">'위치&nbsp;정보를&nbsp;불러오는데&nbsp;실패했습니다.'</span>)});</div></div></td><td style="vertical-align:bottom;padding:0 2px 4px 0"><a href="http://colorscripter.com/info#e" target="_blank" style="text-decoration:none;color:white"><span style="font-size:9px;word-break:normal;background-color:#4f4f4f;color:white;border-radius:10px;padding:1px">cs</span></a></td></tr></table></div>
+
+getCurrentPosition메소드에 함수를 넣어 실행하면,  
+사용자에게 위치정보를 허용하겠냐는 메세지가 뜨고,  
+허용을 받아 __위치정보를 불러오는데 성공했을때는 첫번째 인자에 들어간함수__  
+허용을 못아서 __위치정보를 불러오는데 실패했을때는 두번째 인자에 들어간함수__  
+를 실행하게 된다.  
+
+<a href="https://imgur.com/TR1jO8v"><img src="https://i.imgur.com/TR1jO8v.png" title="source: imgur.com" /></a>  
+
+허용을 누르면 위치정보가 담긴 객체를 인자에 전달한다.  
+
+
+<a href="https://imgur.com/CF5N3oB"><img src="https://i.imgur.com/CF5N3oB.png" title="source: imgur.com" /></a>
+
+즉 위 내용을 본다면,  
+현재 나의 __latitude는 위치.coords.latitude 이고__  
+현재 나의 __longitude는 위치.coords.longitude 이다__  
+정말 기쁘지않은가? 단 몇줄의 한두줄의 코드로 정확하진 않지만,  
+대략적인 위치를 알 수 있다.  
+물론 정확한 위치를 전달해주는 API도 무수히 많을 수 있다.  
+그것은 차차 나중에 알아가보자.  
+
+___  
+
+##  받아온 위치정보를 이용해 날씨앱을 만들기  
+흔히 날씨정보를 받아올 때 openweathermap.org를 쓴다.  
+openweathermap API는 도시를 요청하는것 이외에도  
+__현재 위도와 경도를 요청하는것도 가능한걸 알고있는가?__  
+어떻게 요청하는지 알아보자.  
+https://openweathermap.org/current 사이트를 보면,  
+
+<a href="https://imgur.com/yadMV7w"><img src="https://i.imgur.com/yadMV7w.png" title="source: imgur.com" /></a>  
+
+이렇게 요청url에 lat과 lon을 입력할 수 있는 정보가 뜬다.  
+이쯤되면 가슴이 웅장해지기 시작할거다.  
+머릿속에 코드가 구상된다면 당신은 난사람!  
+이제 어떤식으로 만들어 볼까?  
+
+### getCurrentPosition 의 성공여부에 따른 인자 순서를 기억하자  
+첫번째인자엔 위치를 불러오는데 성공했을때의 함수,  
+두번째 인자에는 위치를 불러오는데 실패했을때의 함수이다.  
+그렇다면 날씨앱과 연결했을땐 어떻게 구상하면 좋을까?  
+__첫번째 인자__ 에는 __불러오는데 성공한 위치에 따른 날씨를 렌더링__ 시켜주는 함수를 만들면되고  
+__두번째 인자__ 에는 __위치정보를 불러오는데 실패했다는 메세지__ 를 표시하면된다.  
+위 구상으로 코드를 짜보자.  
+html과 css구조는 생략하겠다.  
+
+### 첫번째 인자로 들어갈 위치에 따른 날씨 출력 함수 수도코드
+```
+URL을 위도와 경도를 받을수있는 형태로 선언한다.
+  받은위도와 경도정보를 URL에 넣는다
+  정보를 넣은 URL을토대로 객체를 받아온다.
+  객체를 날씨출력함수 인자로 넣어서 호출한다.
+```
+
+___  
+
+## 결과물  
+
+<a href="https://imgur.com/vArvYsg"><img src="https://i.imgur.com/vArvYsg.png" title="source: imgur.com" /></a>  
+
+위치정보권한을 허용해달라고 요청한다. 
+
+### 허용안했을때  
+
+<a href="https://imgur.com/xvYrKcN"><img src="https://i.imgur.com/xvYrKcN.png" title="source: imgur.com" /></a>  
+
+### 허용했을때  
+
+<a href="https://imgur.com/td8dvXj"><img src="https://i.imgur.com/td8dvXj.png" title="source: imgur.com" /></a>  
+
+<a href="https://imgur.com/PZQCkNJ"><img src="https://i.imgur.com/PZQCkNJ.png" title="source: imgur.com" /></a>  
+
+___
+## 전체코드  
+
+<div class="colorscripter-code" style="color:#f0f0f0;font-family:Consolas, 'Liberation Mono', Menlo, Courier, monospace !important; position:relative !important;overflow:auto"><table class="colorscripter-code-table" style="margin:0;padding:0;border:none;background-color:#272727;border-radius:4px;" cellspacing="0" cellpadding="0"><tr><td style="padding:6px;border-right:2px solid #4f4f4f"><div style="margin:0;padding:0;word-break:normal;text-align:right;color:#aaa;font-family:Consolas, 'Liberation Mono', Menlo, Courier, monospace !important;line-height:130%"><div style="line-height:130%">1</div><div style="line-height:130%">2</div><div style="line-height:130%">3</div><div style="line-height:130%">4</div><div style="line-height:130%">5</div><div style="line-height:130%">6</div><div style="line-height:130%">7</div><div style="line-height:130%">8</div><div style="line-height:130%">9</div><div style="line-height:130%">10</div><div style="line-height:130%">11</div><div style="line-height:130%">12</div><div style="line-height:130%">13</div><div style="line-height:130%">14</div><div style="line-height:130%">15</div><div style="line-height:130%">16</div><div style="line-height:130%">17</div><div style="line-height:130%">18</div><div style="line-height:130%">19</div><div style="line-height:130%">20</div><div style="line-height:130%">21</div><div style="line-height:130%">22</div><div style="line-height:130%">23</div><div style="line-height:130%">24</div><div style="line-height:130%">25</div><div style="line-height:130%">26</div><div style="line-height:130%">27</div><div style="line-height:130%">28</div><div style="line-height:130%">29</div><div style="line-height:130%">30</div><div style="line-height:130%">31</div><div style="line-height:130%">32</div><div style="line-height:130%">33</div><div style="line-height:130%">34</div><div style="line-height:130%">35</div><div style="line-height:130%">36</div><div style="line-height:130%">37</div><div style="line-height:130%">38</div><div style="line-height:130%">39</div><div style="line-height:130%">40</div><div style="line-height:130%">41</div><div style="line-height:130%">42</div><div style="line-height:130%">43</div><div style="line-height:130%">44</div><div style="line-height:130%">45</div><div style="line-height:130%">46</div><div style="line-height:130%">47</div><div style="line-height:130%">48</div><div style="line-height:130%">49</div><div style="line-height:130%">50</div><div style="line-height:130%">51</div><div style="line-height:130%">52</div><div style="line-height:130%">53</div><div style="line-height:130%">54</div><div style="line-height:130%">55</div><div style="line-height:130%">56</div><div style="line-height:130%">57</div><div style="line-height:130%">58</div><div style="line-height:130%">59</div><div style="line-height:130%">60</div><div style="line-height:130%">61</div><div style="line-height:130%">62</div><div style="line-height:130%">63</div><div style="line-height:130%">64</div><div style="line-height:130%">65</div><div style="line-height:130%">66</div><div style="line-height:130%">67</div><div style="line-height:130%">68</div><div style="line-height:130%">69</div><div style="line-height:130%">70</div><div style="line-height:130%">71</div><div style="line-height:130%">72</div><div style="line-height:130%">73</div><div style="line-height:130%">74</div><div style="line-height:130%">75</div><div style="line-height:130%">76</div><div style="line-height:130%">77</div></div></td><td style="padding:6px 0;text-align:left"><div style="margin:0;padding:0;color:#f0f0f0;font-family:Consolas, 'Liberation Mono', Menlo, Courier, monospace !important;line-height:130%"><div style="padding:0 6px; white-space:pre; line-height:130%"><span style="color:#ff3399">const</span>&nbsp;APIKEY&nbsp;<span style="color:#aaffaa"></span><span style="color:#ff3399">=</span>&nbsp;<span style="color:#ffd500">'자신의API'</span></div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;</div><div style="padding:0 6px; white-space:pre; line-height:130%"><span style="color:#ff3399">const</span>&nbsp;elInput&nbsp;<span style="color:#aaffaa"></span><span style="color:#ff3399">=</span>&nbsp;<span style="color:#4be6fa">document</span>.querySelector(<span style="color:#ffd500">'input'</span>)</div><div style="padding:0 6px; white-space:pre; line-height:130%"><span style="color:#ff3399">const</span>&nbsp;elSearch&nbsp;<span style="color:#aaffaa"></span><span style="color:#ff3399">=</span>&nbsp;<span style="color:#4be6fa">document</span>.querySelector(<span style="color:#ffd500">'#search'</span>)</div><div style="padding:0 6px; white-space:pre; line-height:130%"><span style="color:#ff3399">const</span>&nbsp;elCity&nbsp;<span style="color:#aaffaa"></span><span style="color:#ff3399">=</span>&nbsp;<span style="color:#4be6fa">document</span>.querySelector(<span style="color:#ffd500">'#city'</span>)</div><div style="padding:0 6px; white-space:pre; line-height:130%"><span style="color:#ff3399">const</span>&nbsp;elIcon&nbsp;<span style="color:#aaffaa"></span><span style="color:#ff3399">=</span>&nbsp;<span style="color:#4be6fa">document</span>.querySelector(<span style="color:#ffd500">'#icon'</span>)</div><div style="padding:0 6px; white-space:pre; line-height:130%"><span style="color:#ff3399">const</span>&nbsp;elStatus&nbsp;<span style="color:#aaffaa"></span><span style="color:#ff3399">=</span>&nbsp;<span style="color:#4be6fa">document</span>.querySelector(<span style="color:#ffd500">'#status'</span>)</div><div style="padding:0 6px; white-space:pre; line-height:130%"><span style="color:#ff3399">const</span>&nbsp;elTemp&nbsp;<span style="color:#aaffaa"></span><span style="color:#ff3399">=</span>&nbsp;<span style="color:#4be6fa">document</span>.querySelector(<span style="color:#ffd500">'#temp'</span>)</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;</div><div style="padding:0 6px; white-space:pre; line-height:130%"><span style="color:#999999">//전송받은&nbsp;객체데이터를&nbsp;토대로&nbsp;화면에&nbsp;날씨정보를&nbsp;출력합니다.</span></div><div style="padding:0 6px; white-space:pre; line-height:130%"><span style="color:#ff3399">function</span>&nbsp;printWeatherData(data){</div><div style="padding:0 6px; white-space:pre; line-height:130%"><span style="color:#999999">//도시이름을&nbsp;제대로&nbsp;입력안했을&nbsp;때</span></div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;<span style="color:#ff3399">if</span>(data.weather&nbsp;<span style="color:#aaffaa"></span><span style="color:#ff3399">=</span><span style="color:#aaffaa"></span><span style="color:#ff3399">=</span><span style="color:#aaffaa"></span><span style="color:#ff3399">=</span>&nbsp;<span style="color:#0086b3">undefined</span>){</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;elCity.textContent&nbsp;<span style="color:#aaffaa"></span><span style="color:#ff3399">=</span>&nbsp;<span style="color:#ffd500">'Fail&nbsp;to&nbsp;load'</span></div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;elIcon.src&nbsp;<span style="color:#aaffaa"></span><span style="color:#ff3399">=</span>&nbsp;<span style="color:#ffd500">'fail.png'</span></div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;elStatus.textContent&nbsp;<span style="color:#aaffaa"></span><span style="color:#ff3399">=</span>&nbsp;<span style="color:#ffd500">'도시&nbsp;이름을&nbsp;찾을&nbsp;수&nbsp;없습니다.'</span></div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;elTemp.textContent&nbsp;<span style="color:#aaffaa"></span><span style="color:#ff3399">=</span>&nbsp;<span style="color:#ffd500">'영어로&nbsp;제대로&nbsp;입력해주세요&nbsp;:)'</span></div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;}</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;elCity.textContent&nbsp;<span style="color:#aaffaa"></span><span style="color:#ff3399">=</span>&nbsp;data.<span style="color:#4be6fa">name</span></div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;elIcon.src&nbsp;<span style="color:#aaffaa"></span><span style="color:#ff3399">=</span>&nbsp;`https:<span style="color:#999999">//openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`</span></div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;elStatus.textContent&nbsp;<span style="color:#aaffaa"></span><span style="color:#ff3399">=</span>&nbsp;data.weather[<span style="color:#c10aff">0</span>].description</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;elTemp.textContent&nbsp;<span style="color:#aaffaa"></span><span style="color:#ff3399">=</span>&nbsp;`${data.main.temp}ºC`</div><div style="padding:0 6px; white-space:pre; line-height:130%">}</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;</div><div style="padding:0 6px; white-space:pre; line-height:130%"><span style="color:#999999">//위치정보를&nbsp;기반으로&nbsp;데이터를요청하는&nbsp;함수</span></div><div style="padding:0 6px; white-space:pre; line-height:130%"><span style="color:#ff3399">function</span>&nbsp;getDataByLocating(la,&nbsp;lon){</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;<span style="color:#ff3399">const</span>&nbsp;URL&nbsp;<span style="color:#aaffaa"></span><span style="color:#ff3399">=</span>&nbsp;`https:<span style="color:#999999">//api.openweathermap.org/data/2.5/weather?lat=${la}&amp;lon=${lon}&amp;units=metric&amp;appid=47ae1f9397984156de1427b9ab3c9c06`</span></div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;fetch(URL).then(<span style="color:#ff3399">function</span>(resp){</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#ff3399">return</span>&nbsp;resp.json();</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;})</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;.then(<span style="color:#ff3399">function</span>(json){</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;printWeatherData(json);</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;})</div><div style="padding:0 6px; white-space:pre; line-height:130%">}</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;</div><div style="padding:0 6px; white-space:pre; line-height:130%"><span style="color:#999999">//위치정보를&nbsp;불러오는데&nbsp;실패했을때&nbsp;실행되는&nbsp;함수</span></div><div style="padding:0 6px; white-space:pre; line-height:130%"><span style="color:#ff3399">function</span>&nbsp;failLocating(){</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;elCity.textContent&nbsp;<span style="color:#aaffaa"></span><span style="color:#ff3399">=</span>&nbsp;<span style="color:#ffd500">'위치&nbsp;정보를&nbsp;불러오는데&nbsp;실패했습니다.'</span></div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;elIcon.src&nbsp;<span style="color:#aaffaa"></span><span style="color:#ff3399">=</span>&nbsp;<span style="color:#ffd500">'fail.png'</span></div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;elStatus.textContent&nbsp;<span style="color:#aaffaa"></span><span style="color:#ff3399">=</span>&nbsp;<span style="color:#ffd500">'Fail&nbsp;to&nbsp;load'</span></div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;elTemp.textContent&nbsp;<span style="color:#aaffaa"></span><span style="color:#ff3399">=</span>&nbsp;<span style="color:#ffd500">'정보공유가&nbsp;싫으시면&nbsp;검색을&nbsp;이용해주세요&nbsp;:)'</span></div><div style="padding:0 6px; white-space:pre; line-height:130%">}</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;</div><div style="padding:0 6px; white-space:pre; line-height:130%"><span style="color:#999999">//검색을&nbsp;기반으로&nbsp;데이터를&nbsp;요청하는&nbsp;함수</span></div><div style="padding:0 6px; white-space:pre; line-height:130%"><span style="color:#ff3399">function</span>&nbsp;getDataBySearching(city){</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;<span style="color:#ff3399">const</span>&nbsp;URL&nbsp;<span style="color:#aaffaa"></span><span style="color:#ff3399">=</span>&nbsp;`https:<span style="color:#999999">//api.openweathermap.org/data/2.5/weather?q=${city}&amp;units=metric&amp;appid=47ae1f9397984156de1427b9ab3c9c06`</span></div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;fetch(URL).then(<span style="color:#ff3399">function</span>(resp){</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#ff3399">return</span>&nbsp;resp.json();</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;})</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;.then(<span style="color:#ff3399">function</span>(json){</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;printWeatherData(json);</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;})</div><div style="padding:0 6px; white-space:pre; line-height:130%">}</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;</div><div style="padding:0 6px; white-space:pre; line-height:130%"><span style="color:#999999">//첫번째인자에는&nbsp;getDataByLocating&nbsp;함수가&nbsp;,&nbsp;두번째인자에는&nbsp;failLocating&nbsp;함수가&nbsp;들어간다.</span></div><div style="padding:0 6px; white-space:pre; line-height:130%"><span style="color:#4be6fa">navigator</span>.geolocation.getCurrentPosition(<span style="color:#ff3399">function</span>&nbsp;(position){</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;<span style="color:#ff3399">const</span>&nbsp;latitude&nbsp;<span style="color:#aaffaa"></span><span style="color:#ff3399">=</span>&nbsp;<span style="color:#4be6fa">String</span>(position.coords.latitude)</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;<span style="color:#ff3399">const</span>&nbsp;longitude&nbsp;<span style="color:#aaffaa"></span><span style="color:#ff3399">=</span>&nbsp;<span style="color:#4be6fa">String</span>(position.coords.longitude)</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;getDataByLocating(latitude,&nbsp;longitude);</div><div style="padding:0 6px; white-space:pre; line-height:130%">},&nbsp;failLocating);</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;</div><div style="padding:0 6px; white-space:pre; line-height:130%"><span style="color:#999999">//검색어를&nbsp;입력하고&nbsp;돋보기&nbsp;버튼을&nbsp;눌렀을&nbsp;때&nbsp;Input밸류값을&nbsp;인자로&nbsp;넣어&nbsp;getDataBySearching함수를&nbsp;호출한다.</span></div><div style="padding:0 6px; white-space:pre; line-height:130%">elSearch.<span style="color:#4be6fa">onclick</span>&nbsp;<span style="color:#aaffaa"></span><span style="color:#ff3399">=</span>&nbsp;<span style="color:#ff3399">function</span>(){</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;getDataBySearching(elInput.value.toLowerCase())</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;elInput.value&nbsp;<span style="color:#aaffaa"></span><span style="color:#ff3399">=</span>&nbsp;<span style="color:#ffd500">''</span></div><div style="padding:0 6px; white-space:pre; line-height:130%">}</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;</div><div style="padding:0 6px; white-space:pre; line-height:130%"><span style="color:#999999">//검색어를&nbsp;입력하고&nbsp;엔터키를&nbsp;눌렀을&nbsp;때&nbsp;Input밸류값을&nbsp;인자로&nbsp;넣어&nbsp;getDataBySearching함수를&nbsp;호출한다.</span></div><div style="padding:0 6px; white-space:pre; line-height:130%">elInput.<span style="color:#4be6fa">addEventListener</span>(<span style="color:#ffd500">'keydown'</span>,&nbsp;<span style="color:#ff3399">function</span>(){</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;<span style="color:#ff3399">if</span>(<span style="color:#4be6fa">window</span>.<span style="color:#4be6fa">event</span>.keyCode&nbsp;<span style="color:#aaffaa"></span><span style="color:#ff3399">=</span><span style="color:#aaffaa"></span><span style="color:#ff3399">=</span><span style="color:#aaffaa"></span><span style="color:#ff3399">=</span>&nbsp;<span style="color:#c10aff">13</span>){&nbsp;</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;getDataBySearching(elInput.value.toLowerCase())</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;elInput.value&nbsp;<span style="color:#aaffaa"></span><span style="color:#ff3399">=</span>&nbsp;<span style="color:#ffd500">''</span></div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;}</div><div style="padding:0 6px; white-space:pre; line-height:130%">});</div></div><div style="text-align:right;margin-top:-13px;margin-right:5px;font-size:9px;font-style:italic"><a href="http://colorscripter.com/info#e" target="_blank" style="color:#4f4f4ftext-decoration:none">Colored by Color Scripter</a></div></td><td style="vertical-align:bottom;padding:0 2px 4px 0"><a href="http://colorscripter.com/info#e" target="_blank" style="text-decoration:none;color:white"><span style="font-size:9px;word-break:normal;background-color:#4f4f4f;color:white;border-radius:10px;padding:1px">cs</span></a></td></tr></table></div>
+
+
+___
+
+### 아쉬운점  
+정확한 위치데이터가 안나와서 아쉽다.  
+getCurrentPosition의 정확도가 떨어지는지,  
+내가 정밀도 조정을 못하는건지는 아직 모르겠다..!  
+다른 좋은 API를 사용해야하는 것인가!  
+근소하게나마 위치가 어느정도 잘 맞긴한다!  
+검색위주로 날씨앱을 만들어보신 우리 동기님들은   
+위치정보를 받아서도 한번 만들어보길 강추한다!  
+무엇보다 짱재밌기 때문이다!
