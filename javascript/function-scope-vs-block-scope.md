@@ -8,6 +8,7 @@
   ___
   ## var follow function scope      
   </br>
+  
   __var__ 는 __function scope__ 를 따른다.  
   아래 예제 코드를 살펴보자.  
  </br>

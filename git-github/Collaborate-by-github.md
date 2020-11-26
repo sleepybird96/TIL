@@ -112,3 +112,7 @@ merge를 하게되면 상위 브랜치에 하위브랜치의 커밋내용을 적
 * 로컬에서 선머지 후 풀리퀘스트
 * 수시로 Pull해서 상위브랜치의 상태를 보자.
 * 풀리퀘가 올라올때 유심히 보자
+
+___  
+스프린트 계획: https://sleepybird.tistory.com/120  
+다음편 보기: https://sleepybird.tistory.com/123
