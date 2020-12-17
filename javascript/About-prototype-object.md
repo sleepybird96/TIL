@@ -63,7 +63,7 @@ prototype은 함수가 생성자로 사용될 때 __링크 역할__ 을 한다.
 이 말이 무슨말인지 모르겠으면  
 내가 콘솔로그로 하는짓을 보자.  
 
-<a href="https://imgur.com/J4D8Yxw"><img src="https://i.imgur.com/J4D8Yxw.png" title="source: imgur.com" /></a>  
+<a href="https://imgur.com/wiRDmCy"><img src="https://i.imgur.com/wiRDmCy.png" title="source: imgur.com" /></a>
   
 보면 생성자로 나올 때 기본특성과 prototype객체에 __메소드를 만들어줬다.__  
 <a href="https://imgur.com/FXEeNcs"><img src="https://i.imgur.com/FXEeNcs.png" title="source: imgur.com" /></a>  
@@ -73,7 +73,7 @@ new연산자를 활용해 한국인 한사람을 생성해보자.
 <a href="https://imgur.com/so9NEBz"><img src="https://i.imgur.com/so9NEBz.png" title="source: imgur.com" /></a>  
   
 철수가 쓰는 언어는 한국어다. 그런데, 프로토타입에 저장된 함수가 실행이될까?  
-<a href="https://imgur.com/fc83tjE"><img src="https://i.imgur.com/fc83tjE.png" title="source: imgur.com" /></a>  
+<a href="https://imgur.com/yeYUOMN"><img src="https://i.imgur.com/yeYUOMN.png" title="source: imgur.com" /></a>
 정상적으로 실행이된다! 왜냐면 객체는 자신의 객체에서 찾을수 없는 값이면,  
 자신의 __proto__인 부모 객체의 prototype에서 찾기 때문이다!  
 <a href="https://imgur.com/GnVIrPH"><img src="https://i.imgur.com/GnVIrPH.png" title="source: imgur.com" /></a>  
