@@ -69,9 +69,8 @@ __둘다__ 배열의 길이가 __0이 아닐동안__
 <a href="https://imgur.com/F44lzAf"><img src="https://i.imgur.com/F44lzAf.png" title="source: imgur.com" /></a>  
 
 ___  
-두 기능을 알아보았으니 수도코드를 어떻게 짤지 그림을 그려가며 생각을 해보자  
+두 기능을 알아보았으니 수도코드를 어떻게 짤지 생각을 해보자  
   
-### 1. 배열을 좌 우로 나눈다.  
 <a href="https://imgur.com/XmnoMp7"><img src="https://i.imgur.com/XmnoMp7.png" title="source: imgur.com" /></a>  
 
 좌 우를 바로 비교하고 병합하는 함수를 적용하면 어떻게 될까?  
@@ -81,7 +80,7 @@ ___
 그래서 __한조각 한조각부터 정렬된 배열을 만들어주는거다__  
 <a href="https://imgur.com/pkxbiSh"><img src="https://i.imgur.com/pkxbiSh.png" title="source: imgur.com" /></a>  
 
-이 작은 한조각부터 합쳐간 값을 최종적으로 리턴한다!  
+이 __작은 한조각부터 합쳐간 값__ 을 최종적으로 리턴한다!  
   
 ___
 ## 자바스크립트 코드  
@@ -90,4 +89,4 @@ ___
   
 
 ### OUTPUT
-<a href="https://imgur.com/jLuBukt"><img src="https://i.imgur.com/jLuBukt.png" title="source: imgur.com" /></a>  
+<a href="https://imgur.com/jLuBukt"><img src="https://i.imgur.com/jLuBukt.png" title="source: imgur.com" /></a>   
