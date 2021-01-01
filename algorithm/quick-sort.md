@@ -84,4 +84,4 @@ splice를 안쓰고 자리를 옮기는게 이렇게 힘들다!
 <a href="https://imgur.com/5YNFZV1"><img src="https://i.imgur.com/5YNFZV1.png" title="source: imgur.com" /></a>  
 
 ### 퀵정렬로 배열 100만개를정리하는데 걸렸던시간은 평균 약0.27초였다  
-20번정도 시도해본듯
+20번정도 시도해본듯 
