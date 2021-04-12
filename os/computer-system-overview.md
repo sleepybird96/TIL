@@ -1,3 +1,7 @@
+### Reference
+
+[Lecture 1. Computer System Overview / 운영체제 강의](https://youtu.be/EdTtGv9w2sA)
+
 # 컴퓨터시스템 전반
 
 cpu gpu등 하드웨어들을 효율적으로 관리하여  
