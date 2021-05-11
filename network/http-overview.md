@@ -94,12 +94,12 @@ IP 프로토콜은 서버가 살아있는지 여부와 상관없이 패킷에 �
 휴대폰 번호가 하나에 4500바이트라고 예시를 들어보자.(그런 경우는 없다 예시일 뿐)  
 패킷은 전송의 부하를 줄이기 위해서 보통 1500바이트 단위로 끊어서 데이터를 전송한다.  
 
-<img width="70%" src="https://drive.google.com/uc?id=1iIc4MQwRAPi9de6eacjq47-WrV1oNciQ">
+<img src="https://drive.google.com/uc?id=1iIc4MQwRAPi9de6eacjq47-WrV1oNciQ">
 
 010과 3333 그리고 7777 각각 1500바이트라면 각각 패킷으로 나눠서 전송을 하게된다.  
 각각 패킷을 보냈을 때, 드라마틱하게 순서대로 도착하면 좋겠지만,  
 
-<img width="70%" src="https://drive.google.com/uc?id=1S9PY4NRPxhwDkfwEH_hcB9QAe1yeBIuJ">
+<img src="https://drive.google.com/uc?id=1S9PY4NRPxhwDkfwEH_hcB9QAe1yeBIuJ">
 
 아쉽게도 도착하는 순서가 달라지는 경우도 있다. 각 패킷마다 다른 노드를 경유할 탈 수 있기 때문이다.    
 IP 프로토콜에는 아무런 순서정보가 없기 때문에 서버는 3333 010 7777 이라는 번호를 전달받을 것이다.
